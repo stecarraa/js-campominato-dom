@@ -1,17 +1,3 @@
-// Consegna
-// L'utente clicca su un bottone che genererà una griglia di gioco quadrata.
-// Ogni cella ha un numero progressivo, da 1 a 100.
-// Ci saranno quindi 10 caselle per ognuna delle 10 righe.
-// Quando l'utente clicca su ogni cella, la cella cliccata si colora di azzurro ed emetto un messaggio in console con il numero della cella cliccata.
-// Bonus
-// Aggiungere una select accanto al bottone di generazione, che fornisca una scelta tra tre diversi livelli di difficoltà:
-// con difficoltà 1 => 100 caselle, con un numero compreso tra 1 e 100, divise in 10 caselle per 10 righe;
-// con difficoltà 2 => 81 caselle, con un numero compreso tra 1 e 81, divise in 9 caselle per 9 righe;
-// con difficoltà 3 => 49 caselle, con un numero compreso tra 1 e 49, divise in 7 caselle per 7 righe;
-
-
-
-
 // ?  Il computer deve generare 16 numeri casuali nello stesso range della difficoltà prescelta: le bombe.
 // ? Attenzione: nella stessa cella può essere posizionata al massimo una bomba, perciò nell’array delle bombe non potranno esserci due numeri uguali.
 // ? In seguito l'utente clicca su una cella: se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina.
@@ -25,22 +11,21 @@
 // ? difficoltà 3 ⇒ 49 caselle, con un numero compreso tra 1 e 49, divise in 7 caselle per 7 righe;
 
 
-// const blackList = []
-
-// const newUniqueNum = getRandomUniqueNumber(blackList, 1, 16);
-
-// blackList.push(newUniqueNum);
-
 
 const populate = document.getElementById('start')
+let bombs = []
+
 
 populate.addEventListener('click',function(){
     // prendo il parent nel DOM
 const gridContainer = document.getElementById('grid-container');
+gridContainer.innerHTML= ''
 
 
 //  ciclo per il numero di quadrati che voglio generare
 for (let i = 1 ; i < 101 ; i++){
+
+   
     // creo un nuovo quadrato con le classi relative
     const newSquare = createNewSquare();
 
@@ -56,10 +41,12 @@ for (let i = 1 ; i < 101 ; i++){
     
 
 }
-generateBombs(16,100)
+    bombs = generateBombs(16,100)
+    console.log(bombs)
 
 
-},{once : true})
+
+})
 
 
 
@@ -78,8 +65,15 @@ function createNewSquare(){
 // funzione che aggiunge e/o rimuove una classe a un dato elemento HTML
 function addEventListenerWithToggle(htmlElement, classToToggle){
     htmlElement.addEventListener('click', function(){
-        htmlElement.classList.toggle(classToToggle);
+      const squareNumber = parseInt(htmlElement.innerHTML)
+      if(bombs.includes(squareNumber)){htmlElement.classList.add('redned');
         console.log('hai cliccato la casella : '+ htmlElement.innerHTML);
+        alert('hai beccato una bomba gioco terminato')
+
+      }
+       
+        else{htmlElement.classList.add(classToToggle);
+            console.log('hai cliccato la casella : '+ htmlElement.innerHTML);}
     });
 }
 
@@ -87,7 +81,7 @@ function addEventListenerWithToggle(htmlElement, classToToggle){
 
 function generateBombs(bombsNumber, cellNumber){
     const bombsCreated=[];
-    console.log(bombsCreated)
+    
     while(bombsCreated.length < bombsNumber){
         const bomb= getRandomNumber(1, cellNumber);
 
